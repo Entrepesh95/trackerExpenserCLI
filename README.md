@@ -13,7 +13,7 @@ this data is saved in a local file so the data stays persistant between runs.
 ## Tech stack used
 - python 3
 - argparse to use the command line
-- json - for storing the data
+- JSON - for storing the data
 
 ## Installation
 
