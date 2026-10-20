@@ -13,5 +13,20 @@
     "category": "ticket",
     "description": "servicios",
     "amount": 3.9
+  },
+  {
+    "category": "voleta",
+    "description": "concierto",
+    "amount": 3.9
+  },
+  {
+    "category": "voleta",
+    "description": "concierto",
+    "amount": 3.9
+  },
+  {
+    "category": "voleta",
+    "description": "concierto",
+    "amount": 3.9
   }
 ]

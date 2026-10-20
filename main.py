@@ -23,7 +23,6 @@ def save_data(expense_data):
         json.dump(expense_data, f, indent=2)
 
 
-# items = dict(category="category", description="description", amount="amount")
 
 def main():
     expense_data = load_data()
