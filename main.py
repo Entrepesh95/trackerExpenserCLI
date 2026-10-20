@@ -10,8 +10,12 @@ def load_data():
     # If the file doesn't exist yet (very first run), start empty
     if not os.path.exists(LIST_FILE):
         return []
-    with open(LIST_FILE, "r") as f:
-        return json.load(f)
+    try:
+        with open(LIST_FILE, "r") as f:
+            return json.load(f)
+    except json.JSONDecodeError:
+        print("Error while reading file")
+        return []
 
 # a function to save data
 def save_data(expense_data):
@@ -19,7 +23,7 @@ def save_data(expense_data):
         json.dump(expense_data, f, indent=2)
 
 
-items = dict(category="category", description="description", amount="amount")
+# items = dict(category="category", description="description", amount="amount")
 
 def main():
     expense_data = load_data()
@@ -30,38 +34,48 @@ def main():
 
     # operations that calls out the command add to add items into the expense list
     add_parser = subparsers.add_parser("add", help="add items to the list")
-    add_parser.add_argument('--a', '--amount', type=str, required=True, help="amount of the item")
-    add_parser.add_argument('--c', '--category', type=str, required=True, help="type of the item")
-    add_parser.add_argument('--d', '--description', type=str, required=True, help="description of the item")
+    add_parser.add_argument('-a', '--amount', type=float, required=True, help="amount of the item")
+    add_parser.add_argument('-c', '--category', type=str, required=True, help="type of the item")
+    add_parser.add_argument('-d', '--description', type=str, required=True, help="description of the item")
 
 
     #operations that calls out the command show the list
     show_parser = subparsers.add_parser("show", help="show items to the list")
-    show_parser.add_argument('--s', '--show', help="display the items")
+
+    #operation to call the total in command
+    total_parser = subparsers.add_parser("total", help="show the total amount of the items")
+
 
     args = parser.parse_args()
 
     # add items into the file and saves it as a dictionary
     if args.command == "add":
 
-        print(args.c + " " + args.d + " " + args.a)
-        items["category"] = args.c
-        items["description"] = args.d
-        items["amount"] = args.a
-
-        expense_data.append(items)
+        expenseDict = {
+            "category": args.category,
+            "description": args.description,
+            "amount": args.amount,
+        }
+        expense_data.append(expenseDict)
         save_data(expense_data)
-
+        print(f"You added: {expenseDict['category']} - {expenseDict['description']} - {expenseDict['amount']}")
 
     # displays the list saved from the file
     elif args.command == "show":
-        for item in expense_data:
+        for expenseItem in expense_data:
 
-            print(item["category"] + " :" + item["description"] + " =" + item["amount"])
+            print(f"{expenseItem['category']}: {expenseItem['description']} = £{expenseItem['amount']}")
+
+    # displays the total amount of the items
+    elif args.command == "total":
+        total = 0
+        for amountItem in expense_data:
+            total += float(amountItem["amount"])
+        print(f"You total: £{total}")
 
     else:
         parser.print_help()
 
 if __name__ == "__main__":
-        main()
+    main()
 
